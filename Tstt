@@ -1,96 +1,149 @@
--- Create GUI
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "SlapSpawnerGUI"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+local PLACE_ID = 128829279907343
 
--- Main frame
-local Main = Instance.new("Frame")
-Main.Size = UDim2.new(0, 400, 0, 400)
-Main.Position = UDim2.new(0.5, -200, 0.5, -200)
-Main.BackgroundColor3 = Color3.fromRGB(128, 0, 128)
-Main.BackgroundTransparency = 0.5
-Main.Active = true
-Main.Draggable = true
-Main.Parent = ScreenGui
+if game.PlaceId == PLACE_ID then
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "SlapSpawnerGUI"
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- Title
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, -40, 0, 40)
-Title.Position = UDim2.new(0, 10, 0, 0)
-Title.BackgroundTransparency = 1
-Title.Text = "Troll Is A Slapping Tower Slap Spawner"
-Title.TextColor3 = Color3.new(1, 1, 1)
-Title.TextScaled = true
-Title.Font = Enum.Font.SourceSansBold
-Title.Parent = Main
+    local Main = Instance.new("Frame")
+    Main.Size = UDim2.new(0, 300, 0, 300)
+    Main.Position = UDim2.new(0.5, -150, 0.5, -150)
+    Main.BackgroundColor3 = Color3.fromRGB(128, 0, 128)
+    Main.BackgroundTransparency = 0.5
+    Main.Active = true
+    Main.Draggable = true
+    Main.Visible = true
+    Main.Parent = ScreenGui
 
--- Close Button (X)
-local Close = Instance.new("TextButton")
-Close.Size = UDim2.new(0, 30, 0, 30)
-Close.Position = UDim2.new(1, -35, 0, 5)
-Close.Text = "X"
-Close.TextColor3 = Color3.new(1, 1, 1)
-Close.BackgroundColor3 = Color3.fromRGB(100, 0, 100)
-Close.Font = Enum.Font.SourceSansBold
-Close.TextScaled = true
-Close.Parent = Main
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1, -40, 0, 40)
+    Title.Position = UDim2.new(0, 10, 0, 0)
+    Title.BackgroundTransparency = 1
+    Title.Text = "Troll Is A Slapping Tower Slap Spawner"
+    Title.TextColor3 = Color3.new(1, 1, 1)
+    Title.TextScaled = true
+    Title.Font = Enum.Font.SourceSansBold
+    Title.Parent = Main
 
--- Dropdown menu container
-local Dropdown = Instance.new("ScrollingFrame")
-Dropdown.Size = UDim2.new(1, -20, 1, -60)
-Dropdown.Position = UDim2.new(0, 10, 0, 50)
-Dropdown.CanvasSize = UDim2.new(0, 0, 0, 1000)
-Dropdown.ScrollBarThickness = 6
-Dropdown.BackgroundColor3 = Color3.new(0, 0, 0)
-Dropdown.BorderSizePixel = 0
-Dropdown.Parent = Main
+    local Close = Instance.new("TextButton")
+    Close.Size = UDim2.new(0, 30, 0, 30)
+    Close.Position = UDim2.new(1, -35, 0, 5)
+    Close.Text = "X"
+    Close.TextColor3 = Color3.new(1, 1, 1)
+    Close.BackgroundColor3 = Color3.fromRGB(100, 0, 100)
+    Close.Font = Enum.Font.SourceSansBold
+    Close.TextScaled = true
+    Close.Parent = Main
 
--- Slap options
-local slaps = {
-    "AppleSlap", "BallonSlap", "BigSlap", "BlockSlap", "BlockySlap", "BrickSlap", "DeafultSlap",
-    "DiamondSlap", "DiceSlap", "Error", "FruitSlap", "GalaxySlap", "God's Hand", "GoldSlap",
-    "LuckySlap", "MagnetSlap", "MailSlap", "PoisonSlap", "RainbowLuckySlap", "SpinSlap",
-    "StreakSlap", "StunSlap", "SwapperSlap", "TripleSlap"
-}
+    local Dropdown = Instance.new("ScrollingFrame")
+    Dropdown.Size = UDim2.new(1, -20, 1, -60)
+    Dropdown.Position = UDim2.new(0, 10, 0, 50)
+    Dropdown.CanvasSize = UDim2.new(0, 0, 0, 1000)
+    Dropdown.ScrollBarThickness = 6
+    Dropdown.BackgroundColor3 = Color3.new(0, 0, 0)
+    Dropdown.BorderSizePixel = 0
+    Dropdown.Parent = Main
 
-for i, slap in ipairs(slaps) do
-    local button = Instance.new("TextButton")
-    button.Size = UDim2.new(1, 0, 0, 40)
-    button.Position = UDim2.new(0, 0, 0, (i - 1) * 42)
-    button.BackgroundColor3 = Color3.new(0, 0, 0)
-    button.TextColor3 = Color3.new(1, 1, 1)
-    button.Font = Enum.Font.SourceSansBold
-    button.TextScaled = true
-    button.Text = slap:gsub("Slap", " Slap"):gsub("God's Hand", "God's Hand")
-    button.Parent = Dropdown
+    local Open = Instance.new("TextButton")
+    Open.Size = UDim2.new(0, 100, 0, 35)
+    Open.Position = UDim2.new(0, 20, 1, -45)
+    Open.Text = "Open"
+    Open.TextColor3 = Color3.new(1, 1, 1)
+    Open.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+    Open.Font = Enum.Font.SourceSansBold
+    Open.TextScaled = true
+    Open.Visible = false
+    Open.Parent = ScreenGui
 
-    button.MouseButton1Click:Connect(function()
-        local chosen = slap
-        local args = {
-            chosen
-        }
-        game:GetService("ReplicatedStorage"):WaitForChild("EquipSlapEvent"):FireServer(unpack(args))
+    local slaps = {
+        "AppleSlap", "BallonSlap", "BigSlap", "BlockSlap", "BlockySlap", "BrickSlap", "DeafultSlap",
+        "DiamondSlap", "DiceSlap", "Error", "FruitSlap", "GalaxySlap", "God's Hand", "GoldSlap",
+        "LuckySlap", "MagnetSlap", "MailSlap", "PoisonSlap", "RainbowLuckySlap", "SpinSlap",
+        "StreakSlap", "StunSlap", "SwapperSlap", "TripleSlap"
+    }
+
+    for i, slap in ipairs(slaps) do
+        local button = Instance.new("TextButton")
+        button.Size = UDim2.new(1, 0, 0, 40)
+        button.Position = UDim2.new(0, 0, 0, (i - 1) * 42)
+        button.BackgroundColor3 = Color3.new(0, 0, 0)
+        button.TextColor3 = Color3.new(1, 1, 1)
+        button.Font = Enum.Font.SourceSansBold
+        button.TextScaled = true
+        button.Text = slap:gsub("Slap", " Slap"):gsub("God's Hand", "God's Hand")
+        button.Parent = Dropdown
+
+        button.MouseButton1Click:Connect(function()
+            local chosen = slap
+            local args = {
+                chosen
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("EquipSlapEvent"):FireServer(unpack(args))
+        end)
+    end
+
+    Close.MouseButton1Click:Connect(function()
+        Main.Visible = false
+        Open.Visible = true
+    end)
+
+    Open.MouseButton1Click:Connect(function()
+        Main.Visible = true
+        Open.Visible = false
+    end)
+else
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "TeleportPromptGUI"
+    gui.ResetOnSpawn = false
+    gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 400, 0, 200)
+    frame.Position = UDim2.new(0.5, -200, 0.5, -100)
+    frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    frame.BackgroundTransparency = 0.3
+    frame.Parent = gui
+
+    local text = Instance.new("TextLabel")
+    text.Size = UDim2.new(1, -20, 0.6, -10)
+    text.Position = UDim2.new(0, 10, 0, 10)
+    text.Text = "Thsis Script Is For \"Troll Slapping Tower\", Do U Wish To Get Teleported To It?"
+    text.TextColor3 = Color3.new(1, 1, 1)
+    text.TextWrapped = true
+    text.TextScaled = true
+    text.Font = Enum.Font.SourceSansBold
+    text.BackgroundTransparency = 1
+    text.Parent = frame
+
+    local yes = Instance.new("TextButton")
+    yes.Size = UDim2.new(0.4, -10, 0.25, 0)
+    yes.Position = UDim2.new(0.05, 0, 0.7, 0)
+    yes.Text = "Yes"
+    yes.TextColor3 = Color3.new(1, 1, 1)
+    yes.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+    yes.Font = Enum.Font.SourceSansBold
+    yes.TextScaled = true
+    yes.Parent = frame
+
+    local no = Instance.new("TextButton")
+    no.Size = UDim2.new(0.4, -10, 0.25, 0)
+    no.Position = UDim2.new(0.55, 0, 0.7, 0)
+    no.Text = "No"
+    no.TextColor3 = Color3.new(1, 1, 1)
+    no.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+    no.Font = Enum.Font.SourceSansBold
+    no.TextScaled = true
+    no.Parent = frame
+
+    yes.MouseButton1Click:Connect(function()
+        setclipboard("https://www.roblox.com/games/128829279907343/")
+        text.Text = "Link copied! Paste it in your browser to join Troll Slapping Tower."
+        yes.Visible = false
+        no.Text = "Close"
+    end)
+
+    no.MouseButton1Click:Connect(function()
+        gui:Destroy()
     end)
 end
-
--- Hide GUI
-Close.MouseButton1Click:Connect(function()
-    Main.Visible = false
-end)
-
--- Open Button
-local Open = Instance.new("TextButton")
-Open.Size = UDim2.new(0, 120, 0, 40)
-Open.Position = UDim2.new(0, 20, 1, -50)
-Open.Text = "Open"
-Open.TextColor3 = Color3.new(1, 1, 1)
-Open.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
-Open.Font = Enum.Font.SourceSansBold
-Open.TextScaled = true
-Open.Visible = true
-Open.Parent = ScreenGui
-
-Open.MouseButton1Click:Connect(function()
-    Main.Visible = true
-end)
