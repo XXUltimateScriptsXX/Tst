@@ -1,10 +1,16 @@
 local PLACE_ID = 128829279907343
 
 if game.PlaceId == PLACE_ID then
+    local Players = game:GetService("Players")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local LocalPlayer = Players.LocalPlayer
+
+    local selectedSlap = nil
+
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "SlapSpawnerGUI"
     ScreenGui.ResetOnSpawn = false
-    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
     local Main = Instance.new("Frame")
     Main.Size = UDim2.new(0, 300, 0, 300)
@@ -37,7 +43,7 @@ if game.PlaceId == PLACE_ID then
     Close.Parent = Main
 
     local Dropdown = Instance.new("ScrollingFrame")
-    Dropdown.Size = UDim2.new(1, -20, 1, -60)
+    Dropdown.Size = UDim2.new(1, -20, 1, -100)
     Dropdown.Position = UDim2.new(0, 10, 0, 50)
     Dropdown.CanvasSize = UDim2.new(0, 0, 0, 1000)
     Dropdown.ScrollBarThickness = 6
@@ -47,7 +53,7 @@ if game.PlaceId == PLACE_ID then
 
     local Open = Instance.new("TextButton")
     Open.Size = UDim2.new(0, 100, 0, 35)
-    Open.Position = UDim2.new(0, 20, 1, -45)
+    Open.Position = UDim2.new(0, 20, 1, -90)
     Open.Text = "Open"
     Open.TextColor3 = Color3.new(1, 1, 1)
     Open.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
@@ -55,6 +61,49 @@ if game.PlaceId == PLACE_ID then
     Open.TextScaled = true
     Open.Visible = false
     Open.Parent = ScreenGui
+
+    local AutoSlapToggle = Instance.new("TextButton")
+    AutoSlapToggle.Size = UDim2.new(0, 120, 0, 35)
+    AutoSlapToggle.Position = UDim2.new(0, 130, 1, -90)
+    AutoSlapToggle.Text = "AutoSlap: OFF"
+    AutoSlapToggle.TextColor3 = Color3.new(1, 1, 1)
+    AutoSlapToggle.BackgroundColor3 = Color3.fromRGB(255, 100, 0)
+    AutoSlapToggle.Font = Enum.Font.SourceSansBold
+    AutoSlapToggle.TextScaled = true
+    AutoSlapToggle.Visible = true
+    AutoSlapToggle.Parent = ScreenGui
+
+    local autoSlapRunning = false
+
+    AutoSlapToggle.MouseButton1Click:Connect(function()
+        autoSlapRunning = not autoSlapRunning
+        AutoSlapToggle.Text = autoSlapRunning and "AutoSlap: ON" or "AutoSlap: OFF"
+
+        if autoSlapRunning then
+            task.spawn(function()
+                while autoSlapRunning do
+                    task.wait()
+                    local char = LocalPlayer.Character
+                    if not (char and selectedSlap and char:FindFirstChild(selectedSlap)) then continue end
+
+                    local tool = char:FindFirstChild(selectedSlap)
+                    local event = tool:FindFirstChild("Event")
+                    if event then
+                        for _, v in ipairs(Players:GetPlayers()) do
+                            if v ~= LocalPlayer and v.Character then
+                                local args = {
+                                    "slash",
+                                    v.Character,
+                                    Vector3.new(3.8138, -0.0000024, -49.8543)
+                                }
+                                event:FireServer(unpack(args))
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end)
 
     local slaps = {
         "AppleSlap", "BallonSlap", "BigSlap", "BlockSlap", "BlockySlap", "BrickSlap", "DeafultSlap",
@@ -75,22 +124,21 @@ if game.PlaceId == PLACE_ID then
         button.Parent = Dropdown
 
         button.MouseButton1Click:Connect(function()
-            local chosen = slap
-            local args = {
-                chosen
-            }
-            game:GetService("ReplicatedStorage"):WaitForChild("EquipSlapEvent"):FireServer(unpack(args))
+            selectedSlap = slap
+            ReplicatedStorage:WaitForChild("EquipSlapEvent"):FireServer(slap)
         end)
     end
 
     Close.MouseButton1Click:Connect(function()
         Main.Visible = false
         Open.Visible = true
+        AutoSlapToggle.Visible = true
     end)
 
     Open.MouseButton1Click:Connect(function()
         Main.Visible = true
         Open.Visible = false
+        AutoSlapToggle.Visible = true
     end)
 else
     local gui = Instance.new("ScreenGui")
@@ -108,7 +156,7 @@ else
     local text = Instance.new("TextLabel")
     text.Size = UDim2.new(1, -20, 0.6, -10)
     text.Position = UDim2.new(0, 10, 0, 10)
-    text.Text = "Thsis Script Is For \"Troll Slapping Tower\", Do U Wish To Get Teleported To It?"
+    text.Text = "This script is for \"Troll Slapping Tower\". Do you want to teleport there?"
     text.TextColor3 = Color3.new(1, 1, 1)
     text.TextWrapped = true
     text.TextScaled = true
