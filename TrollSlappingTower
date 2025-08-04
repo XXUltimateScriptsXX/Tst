@@ -17,6 +17,16 @@ if game.PlaceId == PLACE_ID then
     main.Active = true
     main.Draggable = true
 
+    local openButton = Instance.new("TextButton", gui)
+    openButton.Size = UDim2.new(0, 100, 0, 35)
+    openButton.Position = UDim2.new(0, 10, 1, -45) -- Bottom-left corner
+    openButton.Text = "Open"
+    openButton.TextColor3 = Color3.new(1, 1, 1)
+    openButton.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+    openButton.Font = Enum.Font.SourceSansBold
+    openButton.TextScaled = true
+    openButton.Visible = false
+
     local title = Instance.new("TextLabel", main)
     title.Size = UDim2.new(1, -40, 0, 40)
     title.Position = UDim2.new(0, 10, 0, 0)
@@ -103,27 +113,16 @@ if game.PlaceId == PLACE_ID then
         end
     end)
 
-local openButton = Instance.new("TextButton", gui)
-openButton.Size = UDim2.new(0, 120, 0, 35)
-openButton.Position = UDim2.new(0, 10, 1, -45)
-openButton.Text = "Open Slap GUI"
-openButton.TextColor3 = Color3.new(1, 1, 1)
-openButton.BackgroundColor3 = Color3.fromRGB(100, 0, 100)
-openButton.Font = Enum.Font.SourceSansBold
-openButton.TextScaled = true
-openButton.Visible = false  -- Initially hidden
+    close.MouseButton1Click:Connect(function()
+        main.Visible = false
+        openButton.Visible = true
+    end)
 
--- X button hides the main GUI and shows open button
-close.MouseButton1Click:Connect(function()
-    main.Visible = false
-    openButton.Visible = true
-end)
+    openButton.MouseButton1Click:Connect(function()
+        main.Visible = true
+        openButton.Visible = false
+    end)
 
--- Open button shows the main GUI again
-openButton.MouseButton1Click:Connect(function()
-    main.Visible = true
-    openButton.Visible = false
-end)
 else
     local gui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
     gui.Name = "TeleportPromptGUI"
