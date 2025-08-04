@@ -103,9 +103,27 @@ if game.PlaceId == PLACE_ID then
         end
     end)
 
-    close.MouseButton1Click:Connect(function()
-        main.Visible = false
-    end)
+local openButton = Instance.new("TextButton", gui)
+openButton.Size = UDim2.new(0, 120, 0, 35)
+openButton.Position = UDim2.new(0, 10, 1, -45)
+openButton.Text = "Open Slap GUI"
+openButton.TextColor3 = Color3.new(1, 1, 1)
+openButton.BackgroundColor3 = Color3.fromRGB(100, 0, 100)
+openButton.Font = Enum.Font.SourceSansBold
+openButton.TextScaled = true
+openButton.Visible = false  -- Initially hidden
+
+-- X button hides the main GUI and shows open button
+close.MouseButton1Click:Connect(function()
+    main.Visible = false
+    openButton.Visible = true
+end)
+
+-- Open button shows the main GUI again
+openButton.MouseButton1Click:Connect(function()
+    main.Visible = true
+    openButton.Visible = false
+end)
 else
     local gui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
     gui.Name = "TeleportPromptGUI"
